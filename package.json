@@ -1,0 +1,8 @@
+{
+  "name": "Downtime-Calculator",
+  "version": "0.0.8",
+  "description": "Downtime Calculator",
+  "dependencies": {
+    "harp": "^0.19.0"
+  }
+}
