@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/rzslider.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/jquery-1.11.2.min.js"></script>
+        <script src="js/vendor/angular.min.js"></script>
+        <script src="js/vendor/rzslider.min.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body ng-app="downtimeCalcApp" ng-controller="downtimeCalcCtrl">
+        <img src="img/logo.png" class="logo">
+
+        <form ng-submit="startCalculations()">
+            <div ng-show="step == 1">
+                <fieldset>
+                    <legend>Lost Sales</legend>
+
+                    <label>Yearly Revenue:</label>
+                    <input type="text" ng-model="yearlyRevenue"></input>
+                    <br>
+                    <label>Business Hours per Year:</label>
+                    <input type="text" ng-model="hoursPerYear"></input>
+                    <br>
+                    <label>Impact to Sales:</label>
+                    <rzslider rz-slider-model="impactToSales" rz-slider-ceil="100" rz-slider-step="5"></rzslider>
+                </fieldset>
+                <br>
+                <fieldset>
+                    <legend>Lost Productivity</legend>
+
+                    <label># of Employees Affected:</label>
+                    <input type="text" ng-model="numEmployees"></input>
+                    <br>
+                    <label>Average Employee Cost per Hour:</label>
+                    <input type="text" ng-model="employeeCostPerHour"></input>
+                    <br>
+                    <label>Average Percentage they are Affected:</label>
+                    <rzslider rz-slider-model="percentAffected" rz-slider-ceil="100" rz-slider-step="5"></rzslider>
+                </fieldset>
+                <br>
+
+                <div style="text-align: right;">
+                    <input type="submit" value="Calculate" class="myButton"></input>
+                </div>
+            </div>
+
+            <div class="step2" ng-show="step == 2">
+                <h1>{{ downtimeCost | currency }}</h1>
+                <br>
+                <div class="downtime">
+                    <label>Downtime:</label>
+                    <input type="text" ng-model="hours" ng-value="hours | numberFixedLen: 2"></input>
+                    :
+                    <input type="text" ng-model="minutes" ng-value="minutes | numberFixedLen: 2"></input>
+                    :
+                    <input type="text" ng-model="seconds" ng-value="seconds | numberFixedLen: 2"></input>
+                </div>
+            </div>
+        </form>
+
+        <div class="gradient"></div>
+    </body>
+</html>
