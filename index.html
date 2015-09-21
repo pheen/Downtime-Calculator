@@ -11,10 +11,29 @@
         <script src="js/vendor/jquery-1.11.2.min.js"></script>
         <script src="js/vendor/angular.min.js"></script>
         <script src="js/vendor/rzslider.min.js"></script>
+        <script src="js/vendor/fcsaNumber.min.js"></script>
         <script src="js/main.js"></script>
     </head>
     <body ng-app="downtimeCalcApp" ng-controller="downtimeCalcCtrl">
         <img src="img/logo.png" class="logo">
+
+        <div class="config" ng-show="showConfig">
+            <form>
+                <label>Increment Size:</label>
+                <select ng-model="incrementType">
+                    <option value="hours">hours</option>
+                    <option value="minutes">minutes</option>
+                    <option value="seconds">seconds</option>
+                </select>
+                <input type="text" ng-model="incrementSize" fcsa-number="{ preventInvalidInput: true }"></input>
+                <br><br>
+                <p>Help Info:</p>
+                <ul>
+                    <li>While the timer is running use the up/down arrows to increment the timer</li>
+                    <li>Press "c" or "escape" to exit this popup</li>
+                </ul>
+            </form>
+        </div>
 
         <form ng-submit="startCalculations()">
             <div ng-show="step == 1">
@@ -22,10 +41,10 @@
                     <legend>Lost Sales</legend>
 
                     <label>Yearly Revenue:</label>
-                    <input type="text" ng-model="yearlyRevenue"></input>
+                    <input type="text" ng-model="yearlyRevenue" fcsa-number="{ preventInvalidInput: true }"></input>
                     <br>
                     <label>Business Hours per Year:</label>
-                    <input type="text" ng-model="hoursPerYear"></input>
+                    <input type="text" ng-model="hoursPerYear" fcsa-number="{ preventInvalidInput: true }"></input>
                     <br>
                     <label>Impact to Sales:</label>
                     <rzslider rz-slider-model="impactToSales" rz-slider-ceil="100" rz-slider-step="5"></rzslider>
@@ -34,11 +53,11 @@
                 <fieldset>
                     <legend>Lost Productivity</legend>
 
-                    <label># of Employees Affected:</label>
-                    <input type="text" ng-model="numEmployees"></input>
+                    <label>Number of Employees Affected:</label>
+                    <input type="text" ng-model="numEmployees" fcsa-number="{ preventInvalidInput: true }"></input>
                     <br>
                     <label>Average Employee Cost per Hour:</label>
-                    <input type="text" ng-model="employeeCostPerHour"></input>
+                    <input type="text" ng-model="employeeCostPerHour" fcsa-number="{ preventInvalidInput: true }"></input>
                     <br>
                     <label>Average Percentage they are Affected:</label>
                     <rzslider rz-slider-model="percentAffected" rz-slider-ceil="100" rz-slider-step="5"></rzslider>
@@ -55,11 +74,11 @@
                 <br>
                 <div class="downtime">
                     <label>Downtime:</label>
-                    <input type="text" ng-model="hours" ng-value="hours | numberFixedLen: 2"></input>
+                    <input type="text" ng-model="hours" ng-focus="stopCalculations()" ng-blur="resumeCalculations()" fcsa-number="{ preventInvalidInput: true }"></input>
                     :
-                    <input type="text" ng-model="minutes" ng-value="minutes | numberFixedLen: 2"></input>
+                    <input type="text" ng-model="minutes" ng-focus="stopCalculations()" ng-blur="resumeCalculations()" fcsa-number="{ preventInvalidInput: true }"></input>
                     :
-                    <input type="text" ng-model="seconds" ng-value="seconds | numberFixedLen: 2"></input>
+                    <input type="text" ng-model="seconds" ng-focus="stopCalculations()" ng-blur="resumeCalculations()" fcsa-number="{ preventInvalidInput: true }"></input>
                 </div>
             </div>
         </form>
