@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title></title>
 
-        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/rzslider.css">
         <link rel="stylesheet" href="css/main.css">
 
@@ -79,6 +79,9 @@
                     <input type="text" ng-model="minutes" ng-focus="stopCalculations()" ng-blur="resumeCalculations()" fcsa-number="{ preventInvalidInput: true }"></input>
                     :
                     <input type="text" ng-model="seconds" ng-focus="stopCalculations()" ng-blur="resumeCalculations()" fcsa-number="{ preventInvalidInput: true }"></input>
+                    <br><br>
+                    <button ng-click="toggleCalculations()" class="myButton" type="button">{{calculationToggle}}</button>
+                    <button ng-click="backToForm()" class="myButton" type="button">Back</button>
                 </div>
             </div>
         </form>

@@ -8,6 +8,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
   $scope.showConfig = false;
   $scope.incrementSize = 30;
   $scope.incrementType = 'minutes';
+  $scope.calculationToggle = 'Pause';
 
   $scope.yearlyRevenue       = 2000000;
   $scope.hoursPerYear        = 2000;
@@ -32,7 +33,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
   }
 
   $scope.calculateTimes = function() {
-    $scope.hours   = $scope.downtime.getUTCHours();
+    $scope.hours   = Math.floor($scope.downtime.getTime() / 1000 / 60 / 60);
     $scope.minutes = $scope.downtime.getUTCMinutes();
     $scope.seconds = $scope.downtime.getUTCSeconds();
   }
@@ -44,7 +45,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
     $scope.downtimeCost    = 0;
 
     $scope.calculateCostsInterval = $interval($scope.calculateCosts, 100);
-    $scope.calculateTimesInterval = $interval($scope.calculateTimes, 1000);
+    $scope.calculateTimesInterval = $interval($scope.calculateTimes, 100);
   }
 
   $scope.stopCalculations = function() {
@@ -53,10 +54,12 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
     $scope.calculateCostsInterval = undefined;
     $scope.calculateTimesInterval = undefined;
 
-    $scope.$watchCollection('[hours, minutes, seconds]', function(val) {
-      var hours   = val[0];
-      var minutes = val[1];
-      var seconds = val[2];
+    $scope.cancelTimeWatch = $scope.$watchCollection('[hours, minutes, seconds]', function(val1, val2) {
+      if (val1 === val2) { return; }
+
+      var hours   = val1[0];
+      var minutes = val1[1];
+      var seconds = val1[2];
 
       if (hours !== '' && minutes !== '' && seconds !== '') {
         totalMiliseconds = 0;
@@ -72,8 +75,25 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
   }
 
   $scope.resumeCalculations = function() {
+    $scope.cancelTimeWatch();
     $scope.calculateCostsInterval = $interval($scope.calculateCosts, 100);
     $scope.calculateTimesInterval = $interval($scope.calculateTimes, 1000);
+  }
+
+  $scope.toggleCalculations = function() {
+    if ($scope.calculationToggle === 'Pause') {
+      $scope.stopCalculations();
+      $scope.calculationToggle = 'Continue';
+    } else {
+      $scope.resumeCalculations();
+      $scope.calculationToggle = 'Pause';
+    }
+  }
+
+  $scope.backToForm = function() {
+    $scope.step = 1;
+    $scope.stopCalculations();
+    $scope.cancelTimeWatch();
   }
 
   $scope.incrementAmountInSeconds = function() {
@@ -129,10 +149,6 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
           }
         });
         break;
-      case 9: // tab
-        if ($scope.step === 2) {
-          event.preventDefault();
-        }
     }
   });
 });
