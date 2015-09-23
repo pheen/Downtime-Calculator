@@ -1,13 +1,13 @@
 app = angular.module('downtimeCalcApp', ['rzModule', 'fcsa-number']);
 
 app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
-  $scope.step    = 1;
-  $scope.hours   = 0;
-  $scope.minutes = 0;
-  $scope.seconds = 0;
-  $scope.showConfig = false;
-  $scope.incrementSize = 30;
-  $scope.incrementType = 'minutes';
+  $scope.formStep          = 1;
+  $scope.hours             = 0;
+  $scope.minutes           = 0;
+  $scope.seconds           = 0;
+  $scope.showConfig        = false;
+  $scope.incrementSize     = 30;
+  $scope.incrementType     = 'minutes';
   $scope.calculationToggle = 'Pause';
 
   $scope.yearlyRevenue       = 2000000;
@@ -39,7 +39,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   }
 
   $scope.startCalculations = function() {
-    $scope.step            = 2;
+    $scope.formStep            = 2;
     $scope.downtimeSeconds = 0.0;
     $scope.downtime        = new Date(0);
     $scope.downtimeCost    = 0;
@@ -54,12 +54,12 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
     $scope.calculateCostsInterval = undefined;
     $scope.calculateTimesInterval = undefined;
 
-    $scope.cancelTimeWatch = $scope.$watchCollection('[hours, minutes, seconds]', function(val1, val2) {
-      if (val1 === val2) { return; }
+    $scope.cancelTimeWatch = $scope.$watchCollection('[hours, minutes, seconds]', function(newTime, oldTime) {
+      if (newTime === oldTime) { return; }
 
-      var hours   = val1[0];
-      var minutes = val1[1];
-      var seconds = val1[2];
+      var hours   = newTime[0];
+      var minutes = newTime[1];
+      var seconds = newTime[2];
 
       if (hours !== '' && minutes !== '' && seconds !== '') {
         totalMiliseconds = 0;
@@ -74,7 +74,8 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
     });
   }
 
-  $scope.toggleCalculations = function(isButton, skipNextButton) {
+  $scope.toggleCalculations = function(isButton, skipNextButton, stayPaused) {
+    if (stayPaused && $scope.calculationToggle === 'Continue') { return; }
     if (isButton && $scope.skipNextButton) { return; }
     if (!isButton && skipNextButton) {
       $scope.skipNextButton = true;
@@ -96,7 +97,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   }
 
   $scope.backToForm = function() {
-    $scope.step = 1;
+    $scope.formStep = 1;
     $scope.stopCalculations();
     $scope.cancelTimeWatch();
   }
@@ -116,31 +117,25 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   }
 
   $(document).on('keydown', function(event) {
-    switch(event.keyCode) {
-      case 67: // c
-        $scope.$apply(function() {
+    $scope.$apply(function() {
+      switch(event.keyCode) {
+        case 67: // c
           $scope.showConfig = !$scope.showConfig;
-        });
-        break;
-      case 27: // esc
-        $scope.$apply(function() {
+          break;
+        case 27: // esc
           $scope.showConfig = false;
-        });
-        break;
-      case 38: // up arrow
-        event.preventDefault();
-        $scope.$apply(function() {
-          if ($scope.step === 2) {
+          break;
+        case 38: // up arrow
+          event.preventDefault();
+          if ($scope.formStep === 2) {
             $scope.downtimeSeconds += $scope.incrementAmountInSeconds();
             $scope.downtime.setTime($scope.downtimeSeconds * 1000);
             $scope.calculateTimes();
           }
-        });
-        break;
-      case 40: // down arrow
-        event.preventDefault();
-        $scope.$apply(function() {
-          if ($scope.step === 2) {
+          break;
+        case 40: // down arrow
+          event.preventDefault();
+          if ($scope.formStep === 2) {
             value = $scope.downtimeSeconds - $scope.incrementAmountInSeconds();
 
             if (value > 0) {
@@ -152,8 +147,8 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
             $scope.downtime.setTime($scope.downtimeSeconds * 1000);
             $scope.calculateTimes();
           }
-        });
-        break;
-    }
+          break;
+      }
+    });
   });
 });
