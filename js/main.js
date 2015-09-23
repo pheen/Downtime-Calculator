@@ -1,6 +1,6 @@
 app = angular.module('downtimeCalcApp', ['rzModule', 'fcsa-number']);
 
-app.controller('downtimeCalcCtrl', function($scope, $interval) {
+app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   $scope.step    = 1;
   $scope.hours   = 0;
   $scope.minutes = 0;
@@ -74,19 +74,23 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
     });
   }
 
-  $scope.resumeCalculations = function() {
-    $scope.cancelTimeWatch();
-    $scope.calculateCostsInterval = $interval($scope.calculateCosts, 100);
-    $scope.calculateTimesInterval = $interval($scope.calculateTimes, 1000);
-  }
+  $scope.toggleCalculations = function(isButton, skipNextButton) {
+    if (isButton && $scope.skipNextButton) { return; }
+    if (!isButton && skipNextButton) {
+      $scope.skipNextButton = true;
 
-  $scope.toggleCalculations = function() {
+      $timeout(function() {
+        $scope.skipNextButton = false;
+      }, 100);
+    }
+
     if ($scope.calculationToggle === 'Pause') {
       $scope.stopCalculations();
-      $scope.cancelTimeWatch();
       $scope.calculationToggle = 'Continue';
     } else {
-      $scope.resumeCalculations();
+      $scope.cancelTimeWatch();
+      $scope.calculateCostsInterval = $interval($scope.calculateCosts, 100);
+      $scope.calculateTimesInterval = $interval($scope.calculateTimes, 1000);
       $scope.calculationToggle = 'Pause';
     }
   }
