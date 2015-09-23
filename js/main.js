@@ -83,6 +83,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
   $scope.toggleCalculations = function() {
     if ($scope.calculationToggle === 'Pause') {
       $scope.stopCalculations();
+      $scope.cancelTimeWatch();
       $scope.calculationToggle = 'Continue';
     } else {
       $scope.resumeCalculations();
