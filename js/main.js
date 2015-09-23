@@ -39,7 +39,7 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   }
 
   $scope.startCalculations = function() {
-    $scope.formStep            = 2;
+    $scope.formStep        = 2;
     $scope.downtimeSeconds = 0.0;
     $scope.downtime        = new Date(0);
     $scope.downtimeCost    = 0;
@@ -75,6 +75,9 @@ app.controller('downtimeCalcCtrl', function($scope, $interval, $timeout) {
   }
 
   $scope.toggleCalculations = function(isButton, skipNextButton, stayPaused) {
+    // these params handle are for handling clicking on the Continue
+    // button while you have a time field active as `toggleCalculations`
+    // fires twice, once for ng-blur and once for the button click.
     if (stayPaused && $scope.calculationToggle === 'Continue') { return; }
     if (isButton && $scope.skipNextButton) { return; }
     if (!isButton && skipNextButton) {

@@ -32,23 +32,9 @@ video {
     vertical-align: middle;
 }
 
-/*fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
-}*/
-
 textarea {
     resize: vertical;
 }
-
-.browserupgrade {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
 
 /* ==========================================================================
    styles
@@ -91,8 +77,8 @@ legend {
 }
 
 img.logo {
-    margin-top: 25px;
     width: 225px;
+    margin-top: 25px;
     z-index: 9;
 }
 
@@ -189,7 +175,7 @@ form input[type="text"] {
     font-size: 15px;
 }
 
-.myButton {
+.button {
     -moz-box-shadow: 0px 1px 0px 0px #fff6af;
     -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
     box-shadow: 0px 1px 0px 0px #fff6af;
@@ -215,7 +201,7 @@ form input[type="text"] {
     text-decoration:none;
     text-shadow:0px 1px 0px #ffee66;
 }
-.myButton:hover {
+.button:hover {
     background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
     background:-moz-linear-gradient(top, #ffab23 5%, #ffec64 100%);
     background:-webkit-linear-gradient(top, #ffab23 5%, #ffec64 100%);
@@ -225,7 +211,7 @@ form input[type="text"] {
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffec64',GradientType=0);
     background-color:#ffab23;
 }
-.myButton:active {
+.button:active {
     position:relative;
     top:1px;
 }
