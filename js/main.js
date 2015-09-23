@@ -54,10 +54,12 @@ app.controller('downtimeCalcCtrl', function($scope, $interval) {
     $scope.calculateCostsInterval = undefined;
     $scope.calculateTimesInterval = undefined;
 
-    $scope.cancelTimeWatch = $scope.$watchCollection('[hours, minutes, seconds]', function(val) {
-      var hours   = val[0];
-      var minutes = val[1];
-      var seconds = val[2];
+    $scope.cancelTimeWatch = $scope.$watchCollection('[hours, minutes, seconds]', function(val1, val2) {
+      if (val1 === val2) { return; }
+
+      var hours   = val1[0];
+      var minutes = val1[1];
+      var seconds = val1[2];
 
       if (hours !== '' && minutes !== '' && seconds !== '') {
         totalMiliseconds = 0;
